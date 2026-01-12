@@ -16,7 +16,7 @@
                 <div class="flex">
                     <h3>{{ $product->name }}</h3>
                     <p> - {{ $product->category->name }}</p>
-                    <a>link</a>
+                    <a href="{{route('products.show',$product)}}"  class="text-blue-600 hover:underline">link</a>
                 </div>
             @endforeach
 
