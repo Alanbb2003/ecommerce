@@ -10,7 +10,7 @@ class CartController extends Controller
     public function index()
     {
         $cart = session()->get('cart', []);
-        dd($cart);
+        // dd($cart);
         return view('cart.cart', compact('cart'));
     }
 
@@ -47,6 +47,26 @@ class CartController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Product added to cart'
+        ]);
+    }
+
+    public function remove($id)
+    {
+        $cart = session()->get('cart', []);
+
+        if (!isset($cart[$id])) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Item not found in cart'
+            ], 404);
+        }
+
+        unset($cart[$id]);
+        session()->put('cart', $cart);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Product removed from cart'
         ]);
     }
 }

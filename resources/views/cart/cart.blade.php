@@ -12,7 +12,32 @@
             <p>Your Cart</p>
         @endauth
         <div>
-         this is space for cart item
+            this is space for cart item
+            <table>
+                <thead>
+                    <td>ID</td>
+                    <td>name</td>
+                    <td>size</td>
+                    <td>price</td>
+                    <td>qty</td>
+                    <td>action</td>
+                </thead>
+                <tbody>
+                    @foreach ($cart as $c => $detail)
+                        <tr>
+                            <td>{{ $detail['product_id'] }}</td>
+                            <td>{{ $detail['name'] }}</td>
+                            <td>{{ $detail['size'] }}</td>
+                            <td>{{ $detail['price'] }}</td>
+                            <td>{{ $detail['qty'] }}</td>
+                            <td>
+                                <a href="{{ route('cart.remove', $c) }}" class="toastLink text-red-600"
+                                    data-url="{{ route('cart.remove', $c) }}">Remove</a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 </x-public-layout>
