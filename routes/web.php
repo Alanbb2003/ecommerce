@@ -11,7 +11,10 @@ Route::get('/products/{product:slug}', [ProductController::class, 'show'])
     ->name('products.show');
 Route::get('/cart',[CartController::class,'index'])->name('cart');
 Route::post('/cart',[CartController::class,'add'])->name('cart.store');
-Route::get('/cart/{id}',[CartController::class,'remove'])->name('cart.remove');
+Route::patch('/cart/{id}',[CartController::class,'addOne'])->name('cart.add');
+Route::get('/cart/addOne/{id}',[CartController::class,'addOne'])->name('cart.addOne');
+Route::get('/cart/removeOne/{id}',[CartController::class,'removeOne'])->name('cart.removeOne');
+Route::delete('/cart/{id}',[CartController::class,'remove'])->name('cart.remove');
 Route::middleware(['auth','role:user'])->group(function(){
     Route::get('/dashboard',function(){
         return view('dashboard');

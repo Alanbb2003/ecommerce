@@ -49,7 +49,41 @@ class CartController extends Controller
             'message' => 'Product added to cart'
         ]);
     }
+    public function addOne($id){
+        $cart = session()->get('cart',[]);
 
+        if(!isset($cart[$id])){
+            return response()->json([
+                'status'=>'error',
+                'message'=>'Item not found'
+            ]);
+        }
+
+        $cart[$id]['qty'] += 1;
+        session()->put('cart', $cart);
+
+        return back();
+    }
+
+    public function removeOne($id){
+        $cart = session()->get('cart',[]);
+
+        if(!isset($cart[$id])){
+            return response()->json([
+                'status'=>'error',
+                'message'=>'Item not found'
+            ]);
+        }
+
+        if($cart[$id]['qty'] <= 1){
+            unset($cart[$id]);
+        }else{
+            $cart[$id]['qty'] -= 1;
+        }
+
+        session()->put('cart',$cart);   
+        return back();
+    }
     public function remove($id)
     {
         $cart = session()->get('cart', []);

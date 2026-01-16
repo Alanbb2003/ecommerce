@@ -31,8 +31,10 @@
                             <td>{{ $detail['price'] }}</td>
                             <td>{{ $detail['qty'] }}</td>
                             <td>
-                                <a href="{{ route('cart.remove', $c) }}" class="toastLink text-red-600"
-                                    data-url="{{ route('cart.remove', $c) }}">Remove</a>
+                                <a href="{{route('cart.addOne',$c)}}">+</a>
+                                <a href="{{route('cart.removeOne',$c)}}">-</a>
+                                <a href="{{ route('cart.remove', $c) }}" class="remove-cart text-red-600"
+                                    data-id="{{ $c }}">Remove</a>
                             </td>
                         </tr>
                     @endforeach
