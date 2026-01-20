@@ -49,41 +49,72 @@ class CartController extends Controller
             'message' => 'Product added to cart'
         ]);
     }
-    public function addOne($id){
-        $cart = session()->get('cart',[]);
 
-        if(!isset($cart[$id])){
+    // public function addOne(Request $request,$id){
+    //     $cart = session()->get('cart',[]);
+
+    //     if(!isset($cart[$id])){
+    //         return response()->json([
+    //             'status'=>'error',
+    //             'message'=>'Item not found'
+    //         ]);
+    //     }
+
+    //     $qty = max(1,(int) $request->qty);
+
+    //     $cart[$id]['qty'] = $qty;
+    //     session()->put('cart', $cart);
+
+    //     // return back();
+    //     return response()->json([
+    //         'status'=>'success',
+    //         'message'=>'Added one item',
+    //         'qty' =>$qty,
+    //     ]);
+    // }
+
+    public function update(Request $request, $id)
+    {
+        if (!in_array($request->action, ['increment', 'decrement'])) {
             return response()->json([
-                'status'=>'error',
-                'message'=>'Item not found'
+                'status' => 'error',
+                'message' => 'Invalid action'
+            ], 422);
+        }
+        $cart = session()->get('cart', []);
+
+        if (!isset($cart[$id])) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Item not found'
             ]);
         }
 
-        $cart[$id]['qty'] += 1;
+        if ($request->action === 'increment') {
+            $cart[$id]['qty'] += 1;
+        }
+        if ($request->action === 'decrement') {
+            if ($cart[$id]['qty'] > 1) {
+                $cart[$id]['qty'] -= 1;
+            } else {
+                unset($cart[$id]);
+                session()->put('cart', $cart);
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Item removed',
+                    'removed' => true,
+                ]);
+            }
+        }
         session()->put('cart', $cart);
 
-        return back();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Cart updated',
+            'qty' => $cart[$id]['qty'],
+        ]);
     }
 
-    public function removeOne($id){
-        $cart = session()->get('cart',[]);
-
-        if(!isset($cart[$id])){
-            return response()->json([
-                'status'=>'error',
-                'message'=>'Item not found'
-            ]);
-        }
-
-        if($cart[$id]['qty'] <= 1){
-            unset($cart[$id]);
-        }else{
-            $cart[$id]['qty'] -= 1;
-        }
-
-        session()->put('cart',$cart);   
-        return back();
-    }
     public function remove($id)
     {
         $cart = session()->get('cart', []);

@@ -1,13 +1,12 @@
 import Swal from "sweetalert2";
 
-
 document.addEventListener('click', async (e) => {
-    const btn = e.target.closest('.remove-cart')
-    if (!btn) return
+    const btn = e.target.closest('.remove-cart');
+    if (!btn) return;
 
-    e.preventDefault()
+    e.preventDefault();
 
-    const id = btn.dataset.id
+    const id = btn.dataset.id;
 
     const response = await fetch(`/cart/${id}`, {
         method: 'DELETE',
@@ -16,9 +15,9 @@ document.addEventListener('click', async (e) => {
                 .querySelector('meta[name="csrf-token"]').content,
             'Accept': 'application/json',
         },
-    })
+    });
 
-    const data = await response.json()
+    const data = await response.json();
 
     Swal.fire({
         toast: true,
@@ -27,9 +26,9 @@ document.addEventListener('click', async (e) => {
         title: data.message,
         showConfirmButton: false,
         timer: 2500,
-    })
+    });
 
     if (data.status === 'success') {
-        btn.closest('tr').remove()
+        btn.closest('tr').remove(); // remove row from table
     }
-})
+});

@@ -29,12 +29,20 @@
                             <td>{{ $detail['name'] }}</td>
                             <td>{{ $detail['size'] }}</td>
                             <td>{{ $detail['price'] }}</td>
-                            <td>{{ $detail['qty'] }}</td>
+                            <td class="qty-cart">{{ $detail['qty'] }}</td>
                             <td>
-                                <a href="{{route('cart.addOne',$c)}}">+</a>
-                                <a href="{{route('cart.removeOne',$c)}}">-</a>
-                                <a href="{{ route('cart.remove', $c) }}" class="remove-cart text-red-600"
-                                    data-id="{{ $c }}">Remove</a>
+                                <button type="button" class="update-cart px-2 py-1 border rounded"
+                                    data-id="{{ $c }}" data-action="increment">
+                                    +
+                                </button>
+                                <button type="button" class="update-cart px-2 py-1 border rounded"
+                                    data-id="{{ $c }}" data-action="decrement">
+                                    -
+                                </button>
+
+                                <button type="button" class="remove-cart text-red-600" data-id="{{ $c }}">
+                                    Remove
+                                </button>
                             </td>
                         </tr>
                     @endforeach
