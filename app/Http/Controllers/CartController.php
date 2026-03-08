@@ -50,29 +50,6 @@ class CartController extends Controller
         ]);
     }
 
-    // public function addOne(Request $request,$id){
-    //     $cart = session()->get('cart',[]);
-
-    //     if(!isset($cart[$id])){
-    //         return response()->json([
-    //             'status'=>'error',
-    //             'message'=>'Item not found'
-    //         ]);
-    //     }
-
-    //     $qty = max(1,(int) $request->qty);
-
-    //     $cart[$id]['qty'] = $qty;
-    //     session()->put('cart', $cart);
-
-    //     // return back();
-    //     return response()->json([
-    //         'status'=>'success',
-    //         'message'=>'Added one item',
-    //         'qty' =>$qty,
-    //     ]);
-    // }
-
     public function update(Request $request, $id)
     {
         if (!in_array($request->action, ['increment', 'decrement'])) {

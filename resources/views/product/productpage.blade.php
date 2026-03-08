@@ -8,7 +8,7 @@
                     <span class="text-gray-400">Product Image</span>
                 </div>
 
-                {{-- Thumbnail images (optional) --}}
+                {{-- Thumbnail images--}}
                 <div class="mt-4 flex gap-2">
                     <div class="w-16 h-16 bg-gray-100 rounded"></div>
                     <div class="w-16 h-16 bg-gray-100 rounded"></div>
@@ -42,9 +42,8 @@
                     <div class="flex gap-2">
                         @foreach ($product->variants as $variant)
                             <label>
-                                <input type="radio" name="variant_id" value="{{ $variant->id }}" data-price="{{ $variant->price }}" 
-                                class="hidden peer"
-                                    required>
+                                <input type="radio" name="variant_id" value="{{ $variant->id }}"
+                                    data-price="{{ $variant->price }}" class="hidden peer" required>
 
                                 <span
                                     class="px-4 py-2 border rounded-md text-sm cursor-pointer
@@ -65,7 +64,7 @@
                         </button>
                     </div>
                 </form>
-                
+
                 {{-- Description --}}
                 <div class="mt-8">
                     <h2 class="text-lg font-semibold mb-2">Description</h2>
@@ -76,4 +75,63 @@
             </div>
         </div>
     </div>
+    <script>
+        // change price display
+        document.addEventListener('change', (e) => {
+            if (!e.target.matches('input[name="variant_id"]')) return;
+
+            const price = e.target.dataset.price;
+
+            const priceEl = document.getElementById('product-price');
+            if (!priceEl) return;
+
+            priceEl.textContent = `Rp ${Number(price).toLocaleString('id-ID')}`;
+        });
+
+        // add to cart toast
+        document.addEventListener('submit', async (e) => {
+            const form = e.target;
+
+            if (!form.matches('form[data-ajax]')) return;
+
+            e.preventDefault();
+
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch(form.action, {
+                    method: form.method || 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document
+                            .querySelector('meta[name="csrf-token"]')
+                            .getAttribute('content'),
+                    },
+                    body: formData,
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) throw data;
+
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: data.message ?? 'Success',
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+
+            } catch (error) {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'error',
+                    title: error.message ?? 'Something went wrong',
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+            }
+        });
+    </script>
 </x-app-layout>
